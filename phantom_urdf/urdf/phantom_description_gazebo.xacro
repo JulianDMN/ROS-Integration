@@ -1,0 +1,174 @@
+<?xml version="1.0" ?>
+<!-- 
+  UNIVERSIDAD NACIONAL DE COLOMBIA
+  DEPARTAMENTO DE ING. MECANICA Y MECATRONICA
+  SEMILLERO DE ROBOTICA MOMENTUN
+  LABORATORIO / ROBOTICA 2020-1
+  PROF: PEDRO CARDENAS
+  
+  URDF ROBOT DESCRITION EXAMPLE FOR GAZEBO SIMULATION
+  AUTHOR: JURGEN KREJCI MUNOZ
+  MAIL: jhkrejcim@unal.edu.co
+  ROBOT: 2R
+  VERSION: 1.0
+  -->
+
+<robot name="phantom" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+  <!-- Include -->
+  <property name="M_PI" value="3.14159"/>
+  <property name="scale" value="15 15 15"/>
+  <xacro:include filename="$(find phantom_urdf)/urdf/links_joints.xacro" />
+  <xacro:include filename="$(find phantom_urdf)/urdf/robot_parameters.xacro" />
+
+  <!-- END - Include -->
+
+  <!-- Robot description -->
+  <link name="world"/>  <!-- Base link from Gazebo-->
+
+  <joint name="fixed" type="fixed"> <!-- Joint to fix the base so it does not move-->
+    <parent link="world"/>
+    <child link="${link_00_name}"/>
+  </joint>
+
+  <m_link_mesh name="${link_00_name}"
+    origin_xyz="0 0 0"
+    origin_rpy="0 0 0"
+    meshfile="package://phantom_urdf/meshes/PincherBase.dae" mscale="${scale}"
+    mass="0.33516"
+    ixx="6.5" ixy="0" ixz="-1.3"
+    iyy="7.4" iyz="0"
+    izz="7"	
+  />
+
+  <!-- Cadera -->
+  <m_joint name="${joint_01_name}" 
+    type="revolute"
+    axis_xyz="0 0 1"
+    origin_rpy="0 0 0" origin_xyz="0 0 0.8"
+    parent="${link_00_name}" child="${link_01_name}"
+    limit_e="100" limit_l="-2.61799" limit_u="2.61799" limit_v="6.1785" 
+  />
+
+  <m_link_mesh name="${link_01_name}"
+    origin_xyz="0 0 0.45"
+    origin_rpy="0 0 0" 
+    meshfile="package://phantom_urdf/meshes/PincherLink1.dae" mscale="${scale}"
+    mass="0.11770"
+    ixx="0.4" ixy="0" ixz="0"
+    iyy="0.3" iyz="0"
+    izz="0.2"
+  />
+
+  <!-- Hombro -->
+  <m_joint name="${joint_02_name}" 
+    type="revolute"
+    axis_xyz="0 0 1"
+    origin_rpy="${M_PI/2} ${-M_PI/2} 0" origin_xyz="0 0 1.08"
+    parent="${link_01_name}" child="${link_02_name}"
+    limit_e="100" limit_l="-2" limit_u="2.61799" limit_v="6.1785" 
+  />
+
+  <m_link_mesh name="${link_02_name}"
+    origin_xyz="0 0 0"
+    origin_rpy="${M_PI/2} 0 ${M_PI/2}" 
+    meshfile="package://phantom_urdf/meshes/PincherLink2.dae" mscale="${scale}"
+    mass="0.16229"
+    ixx="1.2" ixy="0" ixz="0"
+    iyy="01.1" iyz="0"
+    izz="0.3"
+  />
+
+  <!-- Codo -->
+  <m_joint name="${joint_03_name}" 
+    type="revolute"
+    axis_xyz="0 0 1"
+    origin_rpy="0 0 0" origin_xyz="1.605 0 0"
+    parent="${link_02_name}" child="${link_03_name}"
+    limit_e="100" limit_l="-2.52" limit_u="2.52" limit_v="6.1785" 
+  />
+
+  <m_link_mesh name="${link_03_name}"
+    origin_xyz="0 0 0"
+    origin_rpy="${M_PI/2} 0 ${M_PI/2}" 
+    meshfile="package://phantom_urdf/meshes/PincherLink2.dae" mscale="${scale}"
+    mass="0.16229"
+    ixx="01.2" ixy="0" ixz="0"
+    iyy="01.1" iyz="0"
+    izz="00.3"
+  />
+
+  <!-- Mano -->
+  <m_joint name="${joint_04_name}" 
+    type="revolute"
+    axis_xyz="0 0 1"
+    origin_rpy="0 0 0" origin_xyz="1.605 0 0"
+    parent="${link_03_name}" child="${link_04_name}"
+    limit_e="100" limit_l="-1.94" limit_u="1.9" limit_v="6.1785" 
+  />
+  <m_link_mesh name="${link_04_name}"
+    origin_xyz="0 0 0"
+    origin_rpy="${M_PI/2} ${M_PI} ${M_PI/2}" 
+    meshfile="package://phantom_urdf/meshes/PincherTool.dae" mscale="${scale}"
+    mass="0.16008"
+    ixx="0.6" ixy="0" ixz="0"
+    iyy="0.7" iyz="0"
+    izz="0.5"	
+  />
+
+  <!-- Gripper -->
+  <m_joint name="${joint_05_name}" 
+    type="prismatic"
+    axis_xyz="0 0 -1"
+    origin_rpy="0 0 0" origin_xyz="0 0 0"
+    parent="${link_04_name}" child="${link_05_name}"
+    limit_e="100" limit_l="0" limit_u="0.225" limit_v="0.5" 
+  />
+
+  <m_link_mesh name="${link_05_name}"
+    origin_xyz="1.074 0 0.425"
+    origin_rpy="${M_PI/2} ${M_PI} ${M_PI/2}" 
+    meshfile="package://phantom_urdf/meshes/PincheFinger.dae" mscale="${scale}"
+    mass="0.017568"
+    ixx="0.03" ixy="0" ixz="0"
+    iyy="0.05" iyz="-0.01"
+    izz="0.03"
+  />
+
+  <m_joint_mimic name="${joint_06_name}" 
+    type="prismatic"
+    axis_xyz="0 0 1"
+    origin_rpy="0 0 0" origin_xyz="0 0 0"
+    parent="${link_04_name}" child="${link_06_name}"
+    limit_e="100" limit_l="0" limit_u="0.225" limit_v="0.5" 
+    mimic_joint="${joint_05_name}" m_multiplier="1" m_offset="0" 
+  />
+
+  <m_link_mesh name="${link_06_name}"
+    origin_xyz="1.074 0 -0.425"
+    origin_rpy="${M_PI/2} 0 ${M_PI/2}" 
+    meshfile="package://phantom_urdf/meshes/PincheFinger.dae" mscale="${scale}"
+    mass="0.017568"
+    ixx="0.03" ixy="0" ixz="0"
+    iyy="0.05" iyz="-0.01"
+    izz="0.03"
+  />
+  <!--
+  <create_noa name="NOA"
+    origin_xyz="1 0 0"
+    origin_rpy="-1.57 0 -1.57" 
+    parent="${link_04_name}"
+  />
+-->
+  <!-- END - Robot description -->
+
+
+  <!-- Gazebo Plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+
+</robot>
+

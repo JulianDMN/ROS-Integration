@@ -1,0 +1,142 @@
+<?xml version="1.0" ?>
+
+<robot name="phantom" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <material name="orange">
+    <color rgba="1 0.5 0 1"/>
+  </material>
+  <property name="M_PI" value="3.14159"/>
+
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 ${M_PI}" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincherBase.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <joint name="cadera" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2.61799" upper="2.61799" velocity="0.5" />
+    <origin rpy="0 0 0" xyz="0 0 0.8"/>
+    <parent link="base_link"/>
+    <child link="link1"/>
+  </joint>
+
+
+  <link name="link1">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.45"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincherLink1.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+
+
+  <joint name="hombro" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2" upper="2.61799" velocity="0.5" />
+    <origin rpy="${M_PI/2} ${-M_PI/2} 0" xyz="0 0 1.08"/>
+    <parent link="link1"/>
+    <child link="link2"/>
+  </joint>
+
+
+  <link name="link2">
+    <visual>
+      <origin rpy="${M_PI/2} 0 ${M_PI/2}" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincherLink2.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <joint name="codo" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-2.52" upper="2.52" velocity="0.5" />
+    <origin rpy="0 0 0" xyz="1.605 0 0"/>
+    <parent link="link2"/>
+    <child link="link3"/>
+  </joint>
+
+
+  <link name="link3">
+    <visual>
+      <origin rpy="${M_PI/2} 0 ${M_PI/2}" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincherLink3.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <joint name="mano" type="revolute">
+    <axis xyz="0 0 1" />
+    <limit effort="1000.0" lower="-1.94" upper="1.9" velocity="0.5" />
+    <origin rpy="0 0 0" xyz="1.605 0 0"/>
+    <parent link="link3"/>
+    <child link="link4"/>
+  </joint>
+
+
+  <link name="link4">
+    <visual>
+      <origin rpy="${M_PI/2} 0 ${M_PI/2}" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincherTool.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+
+  <joint name="gripper" type="prismatic">
+    <axis xyz="0 0 -1" />
+    <limit effort="100.0" lower="0" upper=".225" velocity="0.5" />
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link4"/>
+    <child link="link5"/>
+  </joint>
+
+
+  <link name="link5">
+    <visual>
+      <origin rpy="${M_PI/2} ${M_PI} ${M_PI/2}" xyz="1.074 0 0.425"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincheFinger.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <joint name="gripper2" type="prismatic">
+    <axis xyz="0 0 1" />
+    <limit effort="100.0" lower="0" upper="3.14" velocity="0.5" />
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="link4"/>
+    <mimic joint="gripper" multiplier="1" offset="0" />
+    <child link="link6"/>
+  </joint>
+
+
+  <link name="link6">
+    <visual>
+      <origin rpy="${M_PI/2} 0 ${M_PI/2}" xyz="1.074 0 -0.425"/>
+      <geometry>
+        <mesh filename="package://phantom_urdf/meshes/PincheFinger.dae" scale="15 15 15"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <create_noa name="NOA"
+    origin_xyz="1 0 0"
+    origin_rpy="-1.57 0 -1.57" 
+    parent="link4"
+  />
+</robot>
