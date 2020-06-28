@@ -67,3 +67,6 @@ Es necesario tener los siguientes toolbox instalados en MATLAB:
 - Optimization Toolbox
 - ROS Toolbox
 
+El script para controlar la simulación es /MScripts/Lab_3.m. Las líneas 345 a 347, 477 a 479 y 682 a 684 se deben descomentar y modeificar de acuerdo a las direcciones IP y hostnames correspondientes.
+
+El script se debe correr mientras la simulación en Gazebo está corriendo, al correrse debería abrirse la GUI que permite controlar la simulación
