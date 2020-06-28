@@ -33,13 +33,13 @@ La arquitectura de red en la que se implementó este Git es mostrada en la sigui
 ### - Conectividad de ROS
 Para que todas las máquinas trabajen sobre el mism núcleo, se debe configurar en cada terminal las variables de entorno `ROS\_MASTERURI` , `ROS\_HOSTNAME` y `ROS\_IP`con los siguientes comandos en cada terminal:
 ```
-  export ROS_MASTER_URI=[ROSCORE_HOSTNAME]
+  export ROS_MASTER_URI=http://[ROSCORE_HOSTNAME]:11311/
   export ROS_HOSTNAME=[LOCAL_HOSTNAME]
   export ROS_IP=[LOCAL_IP]
 ```
 Esto se puede automatizar agregando las siguientes líneas al archivo `~/bashrc`
 ```
-  export ROS_MASTER_URI=[ROSCORE_HOSTNAME]
+  export ROS_MASTER_URI=http://[ROSCORE_HOSTNAME]:11311/
   export ROS_HOSTNAME=[LOCAL_HOSTNAME]
   export ROS_IP=[LOCAL_IP]
   
