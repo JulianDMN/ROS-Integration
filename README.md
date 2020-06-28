@@ -70,3 +70,14 @@ Es necesario tener los siguientes toolbox instalados en MATLAB:
 El script para controlar la simulación es /MScripts/Lab_3.m. Las líneas 345 a 347, 477 a 479 y 682 a 684 se deben descomentar y modeificar de acuerdo a las direcciones IP y hostnames correspondientes.
 
 El script se debe correr mientras la simulación en Gazebo está corriendo, al correrse debería abrirse la GUI que permite controlar la simulación
+## Autores:
+- Johan Camilo Herrera Pinilla    <jocherrerapi@unal.edu.co>
+- Johan Sebastian Huertas Castro  <joshuertasca@unal.edu.co>
+- Pablo Andrés Meneses Rincón     <pamenesesri@unal.edu.co@unal.edu.co>
+- Julián David Montenegro Niño    <jdmontenegron@unal.edu.co>
+
+Universidad Nacional de Colombia
+
+Sede Bogotá
+
+Facultad de Ingeniería
