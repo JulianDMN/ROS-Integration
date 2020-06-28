@@ -72,7 +72,7 @@ handles.pos(2,:)=[10 -20 10];
 handles.pos(3,:)=[10 -20 2.5];
 handles.pos(4,:)=[10 -20 10];
 handles.pos(5,:)=[20 0 10];
-handles.pos(6,:)=[20 0 3.5];
+handles.pos(6,:)=[20 0 2.5];
 handles.pos(7,:)=handles.pos(1,:);
 handles.q0=[0 0 0 0];
 MTH=handles.Phantom.fkine(handles.q0);
@@ -342,9 +342,6 @@ function GraficarTodo_Callback(hObject, eventdata, handles)
 if handles.au==true
     clc
     rosshutdown
-    %setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
-    %setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
-    %setenv('ROS_IP','[LOCAL_IP]')
     rosinit; %Conexión con el nodo maestro
 
     pf = getpose(handles.pos,handles.theta);
@@ -391,8 +388,9 @@ if handles.au==true
         while ~(round(A(1))==round(qs(i,1))&&round(A(5))==round(qs(i,2))&&round(A(2))==round(qs(i,3))&&round(A(6))==round(qs(i,4)))
 
             %axes(handles.axes1)
-            %handles.Phantom.plot(qs(i,:),'workspace',[-45 45 -45 45 -5 55], 'scale', 0.7,'noa');
+            %handles.Phantom.plot([qs(i,1) qs(i,2) qs(i,3) qs(i,4)],'workspace',[-45 45 -45 45 -5 55], 'scale', 0.7,'noa');
             %pause(1)
+            
             send(j1,msg1)
             send(j2,msg2)
             send(j3,msg3)
@@ -472,111 +470,7 @@ if handles.au==true
     set(handles.Estado, 'String', 'Detenido');
     guidata(hObject,handles);
 end
-if handles.au==false
- rosshutdown
-    %setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
-    %setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
-    %setenv('ROS_IP','[LOCAL_IP]')
-    rosinit; %ConexiÃ³n con el nodo maestro
 
-    sub=rossubscriber('Phantom_sim/joint_states'); %CreaciÃ³n del subscrptor
-    pause(1);
-    A=sub.LatestMessage.Position; %Arreglo con los valores del mensaje
-    
-    
-    j1=rospublisher('Phantom_sim/joint1_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-    j2=rospublisher('Phantom_sim/joint2_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-    j3=rospublisher('Phantom_sim/joint3_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-    j4=rospublisher('Phantom_sim/joint4_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-    j5=rospublisher('Phantom_sim/joint5_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-    j6=rospublisher('Phantom_sim/joint6_position_controller/command','std_msgs/Float64'); %creaciÃ³n publicador
-
-    q1=[0 0];
-    q2=[0 0];
-    q3=[0 0];
-    q4=[0 0];
-    q5=[0 0];
-                
-    while  handles.au==false;  
-         
-
-        joy = vrjoystick(1);
-        Mover1 = axis(joy, 1);
-        Mover2 = axis(joy, 2);
-        Mover3 = axis(joy, 3);
-        Mover4 = axis(joy, 4);
-        MovG = button(joy, 1);
-
-        a11=q1(2)-15*Mover1;
-        a12=q1(2);
-        a21=q2(2)-15*Mover2;
-        a22=q2(2);
-        a31=q3(2)+15*Mover3;
-        a32=q3(2);
-        a41=q4(2)-15*Mover4;
-        a42=q4(2);
-
-        if MovG==1;
-            a51=q5(2)+3;
-            a52=q5(2);
-            else 
-            a51=q5(2);
-            a52=q5(2);
-        end
-            q1=[a12 a11];
-            q2=[a22 a21];
-            q3=[a32 a31];
-            q4=[a42 a41];
-            q5=[a51 a52];
-            q=[deg2rad(q1) deg2rad(q2) deg2rad(q3) deg2rad(q4) q5];
-                seq=1;
-                for i=1:2
-
-                    q=[deg2rad(q1(i)) deg2rad(q2(i)) deg2rad(q3(i)) deg2rad(q4(i)) q5];
-                    msg1=rosmessage(j1); %CreaciÃ³n del mensaje
-                    msg2=rosmessage(j2); %CreaciÃ³n del mensaje
-                    msg3=rosmessage(j3); %CreaciÃ³n del mensaje
-                    msg4=rosmessage(j4); %CreaciÃ³n del mensaje
-                    msg4=rosmessage(j4); %CreaciÃ³n del mensaje
-                    msg5=rosmessage(j5); %CreaciÃ³n del mensaje
-                    msg6=rosmessage(j5); %CreaciÃ³n del mensaje
-                    msg1.Data=q(1);
-                    msg2.Data=q(2);
-                    msg3.Data=q(3);
-                    msg4.Data=q(4);
-                    msg5.Data=q(5);
-                    msg6.Data=q(5);
-                    send(j1,msg1)
-                    send(j2,msg2)
-                    send(j3,msg3)
-                    send(j4,msg4)
-                    send(j5,msg5)
-                    send(j6,msg5)
-     
-                    pause(1);
-                 
-                    A=sub.LatestMessage.Position; %Arreglo con los valores del mensaje
-                    MTH=handles.Phantom.fkine(round([A(1),A(5),A(2),A(6)]));
-                    set(handles.PoseX, 'String', round(MTH(1,4),2));
-                    set(handles.PoseY, 'String', round(MTH(2,4),2));
-                    set(handles.PoseZ, 'String', round(MTH(3,4),2));
-                    pos=tr2rpy([MTH(1,1),MTH(1,2),MTH(1,3);MTH(2,1),MTH(2,2),MTH(2,3);MTH(3,1),MTH(3,2),MTH(3,3)]);
-                    set(handles.PosePt, 'String', round(rad2deg(pos(3)),2));
-
-                    set(handles.Cadera, 'String', round(A(1),2));
-                    set(handles.Hombro, 'String', round(A(5),2));
-                    set(handles.Codo, 'String', round(A(2),2));
-                    set(handles.Mano, 'String', round(A(6),2));
-                    set(handles.Gripper, 'String', round(A(3),2));
-
-                    guidata(hObject,handles);
-                end
-                
-                guidata(hObject,handles);
-    end
-    guidata(hObject,handles);        
-
-end
 
 
 
@@ -679,9 +573,6 @@ function Parada_Callback(hObject, eventdata, handles)
 set(handles.Estado, 'String', 'Detenido');
 clc
 rosshutdown
-%setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
-%setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
-%setenv('ROS_IP','[LOCAL_IP]')
 rosinit; %Conexión con el nodo maestro
 sub=rossubscriber('Phantom_sim/joint_states'); %Creación del subscrptor
 pause(1);
@@ -708,7 +599,108 @@ function radiobutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hint: get(hObject,'Value') returns toggle state of radiobutton1
+% Hint: get(hObject,'Value') returns toggle state of radiobutton1 rosshutdown
+if handles.au==false
+    rosinit; %ConexiÃ³n con el nodo maestro
+
+    sub=rossubscriber('Phantom_sim/joint_states'); %Creación del subscrptor
+    pause(1);
+    A=sub.LatestMessage.Position; %Arreglo con los valores del mensaje
+    
+    
+    j1=rospublisher('Phantom_sim/joint1_position_controller/command','std_msgs/Float64'); %Creación publicador
+    j2=rospublisher('Phantom_sim/joint2_position_controller/command','std_msgs/Float64'); %Creación publicador
+    j3=rospublisher('Phantom_sim/joint3_position_controller/command','std_msgs/Float64'); %Creación publicador
+    j4=rospublisher('Phantom_sim/joint4_position_controller/command','std_msgs/Float64'); %Creación publicador
+    j5=rospublisher('Phantom_sim/joint5_position_controller/command','std_msgs/Float64'); %Creación publicador
+    j6=rospublisher('Phantom_sim/joint6_position_controller/command','std_msgs/Float64'); %Creación publicador
+
+    q1=[0 0];
+    q2=[0 0];
+    q3=[0 0];
+    q4=[0 0];
+    q5=[0 0];
+                
+    while  handles.au==false;
+        set(handles.Estado, 'String', 'Corriendo(M)');
+         
+
+        joy = vrjoystick(1);
+        Mover1 = axis(joy, 1);
+        Mover2 = axis(joy, 2);
+        Mover3 = axis(joy, 4);
+        Mover4 = axis(joy, 5);
+        MovG = button(joy, 1);
+
+        a11=q1(2)-15*Mover1;
+        a12=q1(2);
+        a21=q2(2)-15*Mover2;
+        a22=q2(2);
+        a31=q3(2)-15*Mover3;
+        a32=q3(2);
+        a41=q4(2)-15*Mover4;
+        a42=q4(2);
+
+        if MovG==1
+            a51=q5(2)+3;
+            a52=q5(2);
+            else 
+            a51=q5(2);
+            a52=q5(2);
+        end
+            q1=[a12 a11];
+            q2=[a22 a21];
+            q3=[a32 a31];
+            q4=[a42 a41];
+            q5=[a51 a52];
+            q=[deg2rad(q1) deg2rad(q2) deg2rad(q3) deg2rad(q4) q5];
+                for i=1:2
+
+                    q=[deg2rad(q1(i)) deg2rad(q2(i)) deg2rad(q3(i)) deg2rad(q4(i)) q5];
+                    msg1=rosmessage(j1); %Creación del mensaje
+                    msg2=rosmessage(j2); %Creación del mensaje
+                    msg3=rosmessage(j3); %Creación del mensaje
+                    msg4=rosmessage(j4); %Creación del mensaje
+                    msg4=rosmessage(j4); %Creación del mensaje
+                    msg5=rosmessage(j5); %Creación del mensaje
+                    msg6=rosmessage(j5); %Creación del mensaje
+                    msg1.Data=q(1);
+                    msg2.Data=q(2);
+                    msg3.Data=q(3);
+                    msg4.Data=q(4);
+                    msg5.Data=q(5);
+                    msg6.Data=q(5);
+                    send(j1,msg1)
+                    send(j2,msg2)
+                    send(j3,msg3)
+                    send(j4,msg4)
+                    send(j5,msg5)
+                    send(j6,msg5)
+     
+                    pause(.2);
+                 
+                    A=sub.LatestMessage.Position; %Arreglo con los valores del mensaje
+                    MTH=handles.Phantom.fkine(round([A(1),A(5),A(2),A(6)]));
+                    set(handles.PoseX, 'String', round(MTH(1,4),2));
+                    set(handles.PoseY, 'String', round(MTH(2,4),2));
+                    set(handles.PoseZ, 'String', round(MTH(3,4),2));
+                    pos=tr2rpy([MTH(1,1),MTH(1,2),MTH(1,3);MTH(2,1),MTH(2,2),MTH(2,3);MTH(3,1),MTH(3,2),MTH(3,3)]);
+                    set(handles.PosePt, 'String', round(rad2deg(pos(3)),2));
+
+                    set(handles.Cadera, 'String', round(A(1),2));
+                    set(handles.Hombro, 'String', round(A(5),2));
+                    set(handles.Codo, 'String', round(A(2),2));
+                    set(handles.Mano, 'String', round(A(6),2));
+                    set(handles.Gripper, 'String', round(A(3),2));
+
+                    guidata(hObject,handles);
+                end
+                
+                guidata(hObject,handles);
+    end
+    guidata(hObject,handles);        
+
+end
 
 
 
