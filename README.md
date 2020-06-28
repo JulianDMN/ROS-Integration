@@ -73,7 +73,7 @@ El script se debe correr mientras la simulación en Gazebo está corriendo, al c
 ## Autores:
 - Johan Camilo Herrera Pinilla    <jocherrerapi@unal.edu.co>
 - Johan Sebastian Huertas Castro  <joshuertasca@unal.edu.co>
-- Pablo Andrés Meneses Rincón     <pamenesesri@unal.edu.co@unal.edu.co>
+- Pablo Andrés Meneses Rincón     <pamenesesri@unal.edu.co>
 - Julián David Montenegro Niño    <jdmontenegron@unal.edu.co>
 
 Universidad Nacional de Colombia
