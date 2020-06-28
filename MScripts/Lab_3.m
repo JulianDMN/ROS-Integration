@@ -342,6 +342,9 @@ function GraficarTodo_Callback(hObject, eventdata, handles)
 if handles.au==true
     clc
     rosshutdown
+    %setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
+    %setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
+    %setenv('ROS_IP','[LOCAL_IP]')
     rosinit; %Conexión con el nodo maestro
 
     pf = getpose(handles.pos,handles.theta);
@@ -471,6 +474,9 @@ if handles.au==true
 end
 if handles.au==false
  rosshutdown
+    %setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
+    %setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
+    %setenv('ROS_IP','[LOCAL_IP]')
     rosinit; %ConexiÃ³n con el nodo maestro
 
     sub=rossubscriber('Phantom_sim/joint_states'); %CreaciÃ³n del subscrptor
@@ -673,6 +679,9 @@ function Parada_Callback(hObject, eventdata, handles)
 set(handles.Estado, 'String', 'Detenido');
 clc
 rosshutdown
+%setenv('ROS_MASTER_URI','http://[ROSCORE_HOSTNAME]:11311/')
+%setenv('ROS_HOSTNAME','[LOCAL_HOSTNAME]')
+%setenv('ROS_IP','[LOCAL_IP]')
 rosinit; %Conexión con el nodo maestro
 sub=rossubscriber('Phantom_sim/joint_states'); %Creación del subscrptor
 pause(1);
