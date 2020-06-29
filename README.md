@@ -2,8 +2,8 @@
 Proyecto intermedio de la asignatura de Robótica, en la que se resuelve la conexión de diferentes elementos relacionados con el control y visualización de manipuladores seriales utilizando ROS como plataforma de integración.
 
 ## Videos:
-- [Video Demostrativo](youtube.com)
-- [Video de Presentación](youtube.com)
+- [Video Demostrativo](https://www.youtube.com/watch?v=el7a4DUKw08&feature=youtu.be)
+- [Video de Presentación](https://www.youtube.com/watch?v=ZiEr0SK4JKs&feature=youtu.be)
 ## Enlace de Informe
 [Overleaf](https://es.overleaf.com/project/5ef7c376717bba0001d75b5c)
 ## Requisitos
