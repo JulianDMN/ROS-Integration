@@ -1,4 +1,4 @@
-# Robotica-Proyecto
+# Integración virtual en ROS
 Proyecto intermedio de la asignatura de Robótica, en la que se resuelve la conexión de diferentes elementos relacionados con el control y visualización de manipuladores seriales utilizando ROS como plataforma de integración.
 
 ## Videos:
